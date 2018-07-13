@@ -1,0 +1,31 @@
+SELECT ingresos_per.id,usuario_id, nombre, fecha,hora,observacion FROM ingresos_per,usuarios WHERE ingresos_per.usuario_id=5
+
+ALTER TABLE `ingresos_per` ADD PRIMARY KEY(`usuario_id`);
+
+
+ALTER TABLE ingresos_per ADD FOREIGN KEY(usuario_id) REFERENCES usuarios(id)
+
+ALTER TABLE `ingresos_per` ADD FOREIGN KEY(usuario_id) REFERENCES usuarios(id);
+
+
+		SELECT ingresos_per.id,usuarios.nombre  ingresos_per.fecha FROM usuarios, ingresos_per
+		SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha FROM usuarios, ingresos_per
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per
+
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per WHERE ingresos_per.id=usuarios.id
+
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per WHERE ingresos_per.usuario_id =usuarios.id
+
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per WHERE ingresos_per.usuario_id =usuarios.id 
+
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per WHERE ingresos_per.usuario_id =usuarios.id  and WHERE fecha BETWEEN '0/07/018' AND '31/07/2018'
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per WHERE ingresos_per.usuario_id =usuarios.id  and  fecha BETWEEN '0/07/018' AND '31/07/2018'
+
+SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per WHERE ingresos_per.usuario_id =usuarios.id  and  ingresos_per.fecha BETWEEN '2018/07/01' AND '2018/07/31'
+

@@ -34,24 +34,8 @@ public class HomeController {
 		//req.setAttribute("mode", "BOOK_VIEW");
 		return "index";
 	}
-        @GetMapping("/reporte")
-	public String reporte(HttpServletRequest req) {
-                String sql="select * from ingresos_per order by id desc";
-                List datos=this.jdbcTemplate.queryForList(sql);
-		req.setAttribute("datos",datos);
-		//req.setAttribute("mode", "BOOK_VIEW");
-		return "reporte_ing";
-	}
-    @GetMapping("/login")
-	public String log(HttpServletRequest req) {
-            String sql="CREATE TABLE nuevos\n" +
-"( customer_id number(10) NOT NULL,\n" +
-"  customer_name varchar2(50) NOT NULL,\n" +
-"  city varchar2(50)\n" +
-")";
-                jdbcTemplate.execute(sql);
-		return "login";
-	}
+        
+   
     @GetMapping("home")
     public ModelAndView home()
     {
