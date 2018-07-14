@@ -29,6 +29,9 @@
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><button  type="button" class="btn btn-warning">Editar</button></a>
                                     <a href="<c:url value="delete?id=${dato.id}" />">
                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-danger">Eliminar</button></a>
+                                    
+                                    <a href="<c:url value="usuariodata?id=${dato.id}" />">
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><button  type="button" class="btn btn-primary">Reporte</button></a>
                                 </td>
                             </tr>
                         </c:forEach>
