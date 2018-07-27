@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.norellanac.controlAccesoArduino.utiles;
+package com.norellanac.controlAccesoArduino.utiles.test;
 
 import com.norellanac.controlAccesoArduino.models.Conectar;
 import com.panamahitek.ArduinoException;
@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author norellanac
  */
-public class arduinoBiDireccionalSerial {
+public class arduinoBiDireccionalSend2Datos {
 
     /**
      * @param args the command line arguments
@@ -44,28 +44,30 @@ public class arduinoBiDireccionalSerial {
         fechasNorellanac fecha= new fechasNorellanac();
             try {
                 if (multi.dataReceptionCompleted()) {
-                    System.out.println("Texto #1 -------> " + multi.getMessage(0));
-                    System.out.println("Texto #2 ----> " + multi.getMessage(1));
+                    System.out.println("Variable #1 -------> " + multi.getMessage(0));
+                    System.out.println("Codigo #2 ----> " + multi.getMessage(1));
                     System.out.println("-----------------------------------");
                     //si el codigo recibido es igual a 10 (o se puede comparar ya con datos del sistema)
-                    if (multi.getMessage(0).equals("5")) {
+                    if (multi.getMessage(0).equals("data")) {
                         System.out.println("Acceso Correcto - Abrir Puerta");
                         System.out.println("Bienvenido Usuario: " + multi.getMessage(0));
-                        ino.sendData("ok");
-                        jdbcTemplate=new JdbcTemplate(con.conectar());
-                        jdbcTemplate.update
+                        int variable=8;
+                        ino.sendData("2,"+variable);
+                        //jdbcTemplate=new JdbcTemplate(con.conectar());
+                        /*jdbcTemplate.update
                             (
                             "insert into ingresos_per (usuario_id,fecha,hora,marca,observacion ) values (?,?,?,?,?)",
                              5,fecha.date(),fecha.time(),1,"ingresando desde java");
-                       
+                       */
                     }
                     else{
-                        ino.sendData("Acceso Denegado - Presione Lector De Huella");
+                        int variable=8;
+                        ino.sendData("2,"+variable);
                     }
                     multi.flushBuffer();
                 }
             } catch (SerialPortException | ArduinoException ex) {
-                Logger.getLogger(arduinoBiDireccionalSerial.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(arduinoBiDireccionalSend2Datos.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -74,9 +76,10 @@ public class arduinoBiDireccionalSerial {
     public static void main(String[] args) {
         try {
             ino.arduinoRXTX(PuertoSerie, 9600, listener);
-            ino.sendData("");
+            ino.sendData("1");
+            ino.sendData("2");
         } catch (ArduinoException | SerialPortException ex) {
-            Logger.getLogger(arduinoBiDireccionalSerial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(arduinoBiDireccionalSend2Datos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
