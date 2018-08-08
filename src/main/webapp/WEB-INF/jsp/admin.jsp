@@ -6,8 +6,8 @@
   <h1 class="display-4">Bienvenido!</h1>
   <p class="lead">Sistema De  Control Del Ingreso De Usuarios</p>
   <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+  <p>Sistema Para Control De Acceso, utilizando metodos de seguridad biometricos</p>
+  <a class="btn btn-primary btn-lg" href="#" role="button">Leer Más</a>
 </div>
 
 <div class="card text-center">

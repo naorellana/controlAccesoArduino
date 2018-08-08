@@ -32,6 +32,13 @@
                                     
                                     <a href="<c:url value="usuariodata?id=${dato.id}" />">
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><button  type="button" class="btn btn-primary">Reporte</button></a>
+                                    <a href="<c:url value="beta?codigo=2,${dato.id}" />">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-dark">Guardar Huella</button></a>
+                                    <a href="<c:url value="facturaData?id=${dato.id}" />">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-info">Factura</button></a>
+                                    <a href="<c:url value="beta?codigo=3,${dato.id}" />">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-success">Entrar</button></a>
+                                    
                                 </td>
                             </tr>
                         </c:forEach>

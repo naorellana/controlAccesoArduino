@@ -4,6 +4,7 @@ package com.norellanac.controlAccesoArduino.controllers;
 
 import com.norellanac.controlAccesoArduino.models.Conectar;
 import com.norellanac.controlAccesoArduino.models.Usuarios;
+import com.norellanac.controlAccesoArduino.utiles.arduinoRecibe2EnviaString;
 import java.io.IOException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -83,6 +84,14 @@ public class HomeController {
                 + "where "
                 + "id=? ",
         id);
+        //elimina huella arduino
+        String codigo="";
+        codigo="4,"+id;
+        System.out.println("Comando: "+ codigo);
+                arduinoRecibe2EnviaString ard=new arduinoRecibe2EnviaString();
+                System.out.println("El codigo enviado es: " +codigo);
+                ard.enviarDato(codigo);
+        //fin arduino
         resp.sendRedirect("/home");
     }
         

@@ -1,8 +1,13 @@
 #include <Adafruit_Fingerprint.h>
+//0,ok  2,9
 #include <SoftwareSerial.h>
-
+//variables globales, se usan solo 2 para imprimir por razones de comunicacion con JAVA
+String text1="";
+String text2="";
 //*******VARIABLES DEL SWITCH 110V*********
-String text="";
+String text="0,0";//variable con datos desde java o modulos de arduino
+String codigo="";
+String variable="";
 int pinArduino=4;
 
 
@@ -17,68 +22,50 @@ void setup() {
 //*********** REGISTRO DE HUELLA *************
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
   delay(100);
-  Serial.println("\n\nAdafruit Fingerprint sensor enrollment");
-
   // set the data rate for the sensor serial port
   finger.begin(57600);
-  
   if (finger.verifyPassword()) {
-    Serial.println("Found fingerprint sensor!");
+    text1="Sensor=SI Menu*** 1-Switch, 2-Regsitrar, 3-LeerHuella, 4-BorrarHuella, Desarollador";
+    //Serial.println("Found fingerprint sensor!");
   } else {
-    Serial.println("Did not find fingerprint sensor :(");
+    text1="sensor=NO:";
+    //Serial.println("Did not find fingerprint sensor :(");
     while (1) { delay(1); }
   }
   //************FIN REGISTRO DE HUELLA***********
 
   //***********INICIA LECTURA DE HUELLA*************
   finger.getTemplateCount();
-  Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
-  Serial.println("Waiting for valid finger...");
+  text2="Templates: ";
+  text2.concat(finger.templateCount);
+  //Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
   //***********FIN LECTURA HUELLA*************
+  Serial.println(text1);
+  Serial.println(text2); 
+  
 }
 
 void loop() {
-
-        // send data only when you receive data:
-        if (Serial.available() > 0) {
-                // read the incoming byte:
-                text=Serial.readString();
-                // say what you got:
-                leerDato(text); //ejecuta la funcion para imprimir
-                
-        }
-}
-
-void lectura() {
-
-        // send data only when you receive data:
-        if (Serial.available() > 0) {
-                // read the incoming byte:
-                text=Serial.readString();
-                // say what you got:
-                leerDato(text); //ejecuta la funcion para imprimir
-                
-        }
-}
-
-
-//funcion que ejecuta segun el texto de entrada
-String leerDato(String dato){
-  
-  if(dato=="1"){
+  // send data only when you receive data:
+  if (Serial.available() > 0) {
+    // read the incoming byte:
+    text=Serial.readString();
+    codigo=text.substring(0,1);
+  variable=text.substring(2,text.length());
+  Serial.println(codigo);
+  Serial.println(variable);
+  switch (codigo.toInt()) {
+  case 1:
+    // statements
     activarSwitch();   //funcion que activa el relay o switch 110v
-  }
-  
-  if(dato=="2"){
-    //**** REGISTRA HUELLA*****
-    Serial.println("dos");
-    registraHuella();  
-  }
-  
-  if(dato=="3"){
-     Serial.println("tres");
-     //********* LECTURA DE HUELLA*************  
-     while (getFingerprintIDez()){
+    break;
+  case 2:
+    // statements
+    registraHuella(variable);
+    break;
+  case 3:
+    //********* LECTURA DE HUELLA*************  
+    while (getFingerprintIDez()){
         getFingerprintIDez();
         delay(50);            //don't ned to run this at full speed.
         if (getFingerprintIDez()>0){
@@ -87,14 +74,14 @@ String leerDato(String dato){
         }
         //break;
       }
-      
-  }
- 
-  if(dato=="4"){
+    break;
+  case 4:
+    // statements
     //******ELIMINA HUELLA  *********
-    Serial.println("cuatro");
+    Serial.println("Eliminando Registro");
     Serial.println("Please type in the ID # (from 1 to 127) you want to delete...");
-    uint8_t id = readnumber();
+    uint8_t id;
+    id=variable.toInt();
     if (id == 0) {// ID #0 not allowed, try again!
        return;
     }
@@ -103,13 +90,47 @@ String leerDato(String dato){
   Serial.println(id);
   
   deleteFingerprint(id);
-    
+    break;
+  case 5:
+    if (variable.toInt()==1005){
+      finger.emptyDatabase();
+      Serial.println("Now database is empty :)");
+      Serial.println("Now database is empty :)");
+    }else{
+       Serial.println("--Clave Erronea :)");
+      Serial.println("--Clave Erronea :)");
+    }
+    // statements
+    //if(codigo=="5" & variable=="1005"){
+    //deleteFromHuellas();
+   
+  //}
+    break;
+  default:
+    // statements
+    //Serial.println("");
+    //delay(5000);
+    break;
+}
   }
+  //Serial.println(codigo);
+  //Serial.println(variable); 
+  //delay(500);
   
-  if(dato=="1005"){
-    Serial.println("Welcome developer");
-    deleteFromHuellas();
-  }
+  /*if (text==""){
+    text="1,0";
+  }*/
+    // say what you got:
+    delay(2000);
+}
+
+
+
+
+//funcion que ejecuta segun el texto de entrada
+String leerDato(String dato){
+  
+  
 }
 uint8_t readnumber(void) {
   uint8_t num = 0;
@@ -126,14 +147,14 @@ uint8_t readnumber(void) {
 void activarSwitch(){
   //activar el switch 110v
     pinMode(pinArduino, OUTPUT); // Configurar relay como salida o OUTPUT
-    Serial.println("uno");
     //ejecuta blink una vez
     digitalWrite(pinArduino, HIGH); // envia señal alta al relay
-    Serial.println("Relay accionado");
+    Serial.println("switchON");
+    Serial.println("Acceso Correcto");
     delay(1000);           // 1 segundo
     
     digitalWrite(pinArduino, LOW);  // envia señal baja al relay
-    Serial.println("Relay no accionado");
+    //Serial.println("switchOFF");
     delay(1000);// 1 segundo 
 }
 //***************************
@@ -153,7 +174,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      Serial.println(".");
+      Serial.print(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -172,7 +193,7 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(1);
   switch (p) {
     case FINGERPRINT_OK:
-      Serial.println("Image converted");
+      Serial.print("Image converted");
       break;
     case FINGERPRINT_IMAGEMESS:
       Serial.println("Image too messy");
@@ -191,7 +212,7 @@ uint8_t getFingerprintEnroll() {
       return p;
   }
   
-  Serial.println("Remove finger");
+  Serial.println("  - Remove finger");
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
@@ -262,10 +283,10 @@ uint8_t getFingerprintEnroll() {
     return p;
   }   
   
-  Serial.print("ID "); Serial.println(id);
+  Serial.print("ID "); Serial.print(id);
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
-    Serial.println("Stored!");
+    Serial.println(" Stored!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;
@@ -282,10 +303,9 @@ uint8_t getFingerprintEnroll() {
 }
 //************FIN REGISTRO HUELLA FUNCION***********
 //********************************registrar huellas********************************
-void registraHuella(){
-  Serial.println("Ready to enroll a fingerprint!");
-  Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
-  id = readnumber();
+void registraHuella(String var){
+  id = var.toInt();
+  Serial.println(id,DEC);
   if (id == 0) {// ID #0 not allowed, try again!
      return;
   }
@@ -376,8 +396,8 @@ int getFingerprintIDez() {
   if (p != FINGERPRINT_OK)  return -1;
   
   // found a match!
-  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
-  Serial.print(" with confidence of "); Serial.println(finger.confidence);
+  Serial.println("FoundID"); 
+  Serial.println(finger.fingerID); 
   return finger.fingerID; 
   }
 //**************** FIN FUN LECTURA HUELLA*******************
@@ -411,7 +431,7 @@ uint8_t deleteFingerprint(uint8_t id) {
 
 //***************** FUNCION ELIMINAR TODAS LAS HUELLAS ***********************
 void deleteFromHuellas(){
-  Serial.println("\n\nDeleting all fingerprint templates!");
+  Serial.println("- Delete all fingerprint templates?!");
   Serial.println("Press 'Y' key to continue");
 
   while (1) {
@@ -419,10 +439,7 @@ void deleteFromHuellas(){
       break;
     }
   }
-
-  // set the data rate for the sensor serial port
-  finger.begin(57600);
-  
+ 
   if (finger.verifyPassword()) {
     Serial.println("Found fingerprint sensor!");
   } else {
@@ -435,3 +452,5 @@ void deleteFromHuellas(){
   Serial.println("Now database is empty :)");
 }
 //*****************************************
+
+
