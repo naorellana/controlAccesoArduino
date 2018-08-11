@@ -1,4 +1,9 @@
+//**********DECLARACIONES*************
 #include <Adafruit_Fingerprint.h>
+// For UNO and others without hardware serial, we must use software serial...
+// pin #2 is IN from sensor (GREEN wire)
+// pin #3 is OUT from arduino  (WHITE wire)
+//pin 4 switch
 //0,ok  2,9
 #include <SoftwareSerial.h>
 //variables globales, se usan solo 2 para imprimir por razones de comunicacion con JAVA
@@ -8,7 +13,8 @@ String text2="";
 String text="0,0";//variable con datos desde java o modulos de arduino
 String codigo="";
 String variable="";
-int pinArduino=4;
+int pinArduino=4; //switch
+const int buzzer = 5; //buzzer to arduino pin 5d
 
 
 //******VARIABLES DEL ENROLL*****************
@@ -16,6 +22,28 @@ SoftwareSerial mySerial(2, 3);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 uint8_t id;
 //**************FIN VARIABLES ENROL**********
+
+//*********DISPLAY LCD***********
+// Prueba de Modulo I2C para LCD 2x16 By: http://dinastiatecnologica.com
+
+#include  <Wire.h>
+#include  <LiquidCrystal_I2C.h>
+String a="Sistema Control De Acceso";
+String b="Nery ORellana:)";
+
+// Constructor de la librería de LCD 16x2
+// Aqui se configuran los pines asignados a la pantalla del PCF8574
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+//*******************
+  //int ledPin = 9; // Piezo on Pin 8
+const int ldrPin = A3; // LDR en el pin analogico 0
+int ldrValue = 0;
+
+  byte sensorpir = 7;
+byte led = 13;
+  
+//**************FIN DECLARACIONES***********
+
 
 void setup() {
   Serial.begin(9600);     // opens serial port, sets data rate to 9600 bps
@@ -42,10 +70,15 @@ void setup() {
   //***********FIN LECTURA HUELLA*************
   Serial.println(text1);
   Serial.println(text2); 
-  
+  //dispLCD(text1, text2);
+  pinMode(7,INPUT);
+ 
 }
 
 void loop() {
+  //sensorLuz(); 
+sensorLuz(700);
+sensorMov();
   // send data only when you receive data:
   if (Serial.available() > 0) {
     // read the incoming byte:
@@ -54,10 +87,12 @@ void loop() {
   variable=text.substring(2,text.length());
   Serial.println(codigo);
   Serial.println(variable);
+  dispLCD(codigo, variable);
   switch (codigo.toInt()) {
   case 1:
     // statements
     activarSwitch();   //funcion que activa el relay o switch 110v
+    dispLCD("Abrir Puerta", text1);
     break;
   case 2:
     // statements
@@ -69,7 +104,9 @@ void loop() {
         getFingerprintIDez();
         delay(50);            //don't ned to run this at full speed.
         if (getFingerprintIDez()>0){
+          dispLCD("Acceso Correcto", text1);
           activarSwitch();//funcion que activa el relay o switch 110v
+          sonido(2);
           break;
         }
         //break;
@@ -90,6 +127,7 @@ void loop() {
   Serial.println(id);
   
   deleteFingerprint(id);
+  dispLCD("Se elimino el registro con ID: "+id, text1);
     break;
   case 5:
     if (variable.toInt()==1005){
@@ -148,7 +186,7 @@ void activarSwitch(){
   //activar el switch 110v
     pinMode(pinArduino, OUTPUT); // Configurar relay como salida o OUTPUT
     //ejecuta blink una vez
-    digitalWrite(pinArduino, HIGH); // envia señal alta al relay
+    //digitalWrite(pinArduino, HIGH); // envia señal alta al relay
     Serial.println("switchON");
     Serial.println("Acceso Correcto");
     delay(1000);           // 1 segundo
@@ -156,6 +194,7 @@ void activarSwitch(){
     digitalWrite(pinArduino, LOW);  // envia señal baja al relay
     //Serial.println("switchOFF");
     delay(1000);// 1 segundo 
+    digitalWrite(pinArduino, HIGH);
 }
 //***************************
 
@@ -454,3 +493,74 @@ void deleteFromHuellas(){
 //*****************************************
 
 
+//********** FUNCION DE TONO (BUZZER) ******************
+void sonido(int segundos){
+   
+  pinMode(buzzer, OUTPUT); // Set buzzer - pin 9 as an output
+  tone(buzzer, 1000); // Send 1KHz sound signal...
+  delay(segundos*1000);        // ...for 1 sec
+  noTone(buzzer);     // Stop sound...
+  //delay(1000);        // ...for 1sec
+}
+//******************************
+
+
+//************** FUNCION MOSTAR EN LCD 2X16*****************
+void dispLCD(String a,String b) {
+   // Indicar a la libreria que tenemos conectada una pantalla de 16x2
+  lcd.begin(16, 2);
+  // Mover el cursor a la primera posición de la pantalla (0, 0)
+  lcd.home ();
+  // Imprimir "Hola Mundo" en la primera linea
+  lcd.print(a);
+  // Mover el cursor a la segunda linea (1) primera columna
+  lcd.setCursor ( 0, 1 );
+  // Imprimir otra cadena en esta posicion
+  lcd.print(b);
+  // Esperar un segundo
+  //delay(1000);
+//mueve las letras en la pantalla 
+  for(int c=0;c<12;c++){
+  lcd.scrollDisplayLeft();
+  delay(400);
+  }
+  /*for(int c=0; c<12;c++){
+  lcd.scrollDisplayRight();
+  delay(400); 
+  }*/
+}
+//******************************
+
+
+//***************fotoResistencia******************
+void sensorLuz(int resistencia){
+
+
+//pinMode(ledPin,OUTPUT);
+
+ldrValue = analogRead(ldrPin); 
+Serial.println(ldrValue);
+if (ldrValue >= resistencia){
+  sonido(1);
+  sonido(1);
+  sonido(1);
+}
+else {
+//digitalWrite(ledPin,LOW);
+}
+delay(1000);
+}
+//*********************************
+
+
+//********** SENSOR MOVIMIENVO*************
+void sensorMov(){
+  
+  if(digitalRead(sensorpir) == HIGH)
+  {
+    Serial.println("Detectado movimiento por el sensor pir");
+    sonido(2);
+  }
+  
+}
+//***********************
