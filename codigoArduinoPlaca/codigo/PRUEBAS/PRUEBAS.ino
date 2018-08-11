@@ -70,7 +70,7 @@ void setup() {
   //***********FIN LECTURA HUELLA*************
   Serial.println(text1);
   Serial.println(text2); 
-  //dispLCD(text1, text2);
+  dispLCD("Sistema De Control", "Ingressos GYM");
   pinMode(7,INPUT);
  
 }
@@ -79,6 +79,7 @@ void loop() {
   //sensorLuz(); 
 sensorLuz(700);
 sensorMov();
+//dispLCD("Sistema De Control", "Ingressos GYM");
   // send data only when you receive data:
   if (Serial.available() > 0) {
     // read the incoming byte:
@@ -87,12 +88,12 @@ sensorMov();
   variable=text.substring(2,text.length());
   Serial.println(codigo);
   Serial.println(variable);
-  dispLCD(codigo, variable);
+  dispLCD("Sistema De Control", "Ingressos GYM");
   switch (codigo.toInt()) {
   case 1:
     // statements
     activarSwitch();   //funcion que activa el relay o switch 110v
-    dispLCD("Abrir Puerta", text1);
+    dispLCD("Abrir Puerta", "Bienvenido");
     break;
   case 2:
     // statements
@@ -104,7 +105,7 @@ sensorMov();
         getFingerprintIDez();
         delay(50);            //don't ned to run this at full speed.
         if (getFingerprintIDez()>0){
-          dispLCD("Acceso Correcto", text1);
+          dispLCD("Acceso Correcto", "Bienvenido");
           activarSwitch();//funcion que activa el relay o switch 110v
           sonido(2);
           break;
@@ -127,13 +128,14 @@ sensorMov();
   Serial.println(id);
   
   deleteFingerprint(id);
-  dispLCD("Se elimino el registro con ID: "+id, text1);
+  dispLCD("Eliminando Datos","Registro con ID: "+id);
     break;
   case 5:
     if (variable.toInt()==1005){
       finger.emptyDatabase();
       Serial.println("Now database is empty :)");
       Serial.println("Now database is empty :)");
+      dispLCD("Eliminando", "Todos Los Registros Eliminados");
     }else{
        Serial.println("--Clave Erronea :)");
       Serial.println("--Clave Erronea :)");
@@ -206,6 +208,7 @@ uint8_t getFingerprintEnroll() {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);
+  dispLCD("Registrando", "Colocar Dedo");
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -252,6 +255,7 @@ uint8_t getFingerprintEnroll() {
   }
   
   Serial.println("  - Remove finger");
+  dispLCD("Registrando", "Remueva Dedo");
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
@@ -260,6 +264,7 @@ uint8_t getFingerprintEnroll() {
   Serial.print("ID "); Serial.println(id);
   p = -1;
   Serial.println("Place same finger again");
+  dispLCD("Registrando", "Colocar De Nuevo");
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -326,6 +331,7 @@ uint8_t getFingerprintEnroll() {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println(" Stored!");
+    dispLCD("Registrando", "OK!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;
@@ -522,12 +528,12 @@ void dispLCD(String a,String b) {
 //mueve las letras en la pantalla 
   for(int c=0;c<12;c++){
   lcd.scrollDisplayLeft();
-  delay(400);
+  delay(100);
   }
-  /*for(int c=0; c<12;c++){
+  for(int c=0; c<12;c++){
   lcd.scrollDisplayRight();
-  delay(400); 
-  }*/
+  delay(100); 
+  }
 }
 //******************************
 
@@ -539,16 +545,20 @@ void sensorLuz(int resistencia){
 //pinMode(ledPin,OUTPUT);
 
 ldrValue = analogRead(ldrPin); 
-Serial.println(ldrValue);
+//Serial.println(ldrValue);
 if (ldrValue >= resistencia){
   sonido(1);
+  delay(250);
   sonido(1);
+  delay(250);
   sonido(1);
+  //dispLCD("Detectado Ingreso","Sensor Luz");
+  
 }
 else {
 //digitalWrite(ledPin,LOW);
 }
-delay(1000);
+//delay(1000);
 }
 //*********************************
 
@@ -558,8 +568,12 @@ void sensorMov(){
   
   if(digitalRead(sensorpir) == HIGH)
   {
-    Serial.println("Detectado movimiento por el sensor pir");
-    sonido(2);
+    //dispLCD("Detectado Ingreso","Sensor Movimiento");
+    sonido(1);
+  delay(250);
+  sonido(1);
+  delay(250);
+  sonido(1);
   }
   
 }
