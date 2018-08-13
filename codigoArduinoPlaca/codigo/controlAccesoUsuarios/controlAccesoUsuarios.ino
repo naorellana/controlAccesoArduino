@@ -39,9 +39,11 @@ LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 const int ldrPin = A3; // LDR en el pin analogico 0
 int ldrValue = 0;
 
-  byte sensorpir = 7;
+  byte sensorpir = 6;
 byte led = 13;
-  
+byte pulsador = 7;
+
+  int cont=0;
 //**************FIN DECLARACIONES***********
 
 
@@ -77,8 +79,8 @@ void setup() {
 
 void loop() {
   //sensorLuz(); 
-sensorLuz(700);
-sensorMov();
+//sensorLuz(700);
+//sensorMov();
 //dispLCD("Sistema De Control", "Ingressos GYM");
   // send data only when you receive data:
   if (Serial.available() > 0) {
@@ -107,7 +109,15 @@ sensorMov();
         if (getFingerprintIDez()>0){
           dispLCD("Acceso Correcto", "Bienvenido");
           activarSwitch();//funcion que activa el relay o switch 110v
-          sonido(2);
+          pinMode(7,INPUT);
+          for (int i=0; i<15;i++){
+            sensorMov();
+            delay(1000);
+            if(digitalRead(pulsador) == HIGH){
+              i=15;
+            }
+          }
+          //sonido(2);
           break;
         }
         //break;
@@ -565,6 +575,7 @@ void sensorMov(){
   if(digitalRead(sensorpir) == HIGH)
   {
     //dispLCD("Detectado Ingreso","Sensor Movimiento");
+    Serial.println("Detectado Ingreso Sensor Movimiento");
     sonido(1);
   delay(250);
   sonido(1);

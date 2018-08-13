@@ -22,6 +22,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class arduinoRecibe2EnviaString {
     private static String textoEnviado;
+    private static String concatTextArduino="";
+    private static String codUsuario="";
+    private static String warning="no";
 
     /**
      * @param args the command line arguments
@@ -66,16 +69,22 @@ public class arduinoRecibe2EnviaString {
                     if (multi.getMessage(0).equals("0")) {
                         System.out.println("Acceso Correcto - Abrir Puerta");
                         System.out.println("Bienvenido Usuario: " + multi.getMessage(0));
+                        System.out.println(concatTextArduino);
+                        System.out.println("Usuario: "+codUsuario);
+                        System.out.println("Alerta!: "+warning);
                         //int variable=8;
                         //ino.sendData( textoEnviado);
                         //textoEnviado="0,0";
                         ino.killArduinoConnection();
-                        //jdbcTemplate=new JdbcTemplate(con.conectar());
-                        /*jdbcTemplate.update
+                        if (codUsuario!=""){
+                            
+                        jdbcTemplate=new JdbcTemplate(con.conectar());
+                        jdbcTemplate.update
                             (
                             "insert into ingresos_per (usuario_id,fecha,hora,marca,observacion ) values (?,?,?,?,?)",
-                             5,fecha.date(),fecha.time(),1,"ingresando desde java");
-                       */
+                             codUsuario,fecha.date(),fecha.time(),1,warning);
+                       
+                        }
                     }
                     else{
                         int variable=8;
@@ -84,6 +93,13 @@ public class arduinoRecibe2EnviaString {
                     }
                     System.out.println("Codigo  -------> " + multi.getMessage(0));
                     System.out.println("Variable    -------> " + multi.getMessage(1));
+                    if (multi.getMessage(0).equals("FoundID" )){
+                        codUsuario=multi.getMessage(1);
+                    }
+                    if (multi.getMessage(0).equals("Detectado Ingreso Sensor Movimiento" )&&multi.getMessage(1).equals("Detectado Ingreso Sensor Movimiento" )){
+                        warning="si";
+                    }
+                    concatTextArduino=concatTextArduino+multi.getMessage(0)+multi.getMessage(1);
                     System.out.println("-----------------------------------");
                     
                     multi.flushBuffer();
