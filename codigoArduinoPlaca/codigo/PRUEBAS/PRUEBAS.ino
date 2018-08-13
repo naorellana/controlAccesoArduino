@@ -39,9 +39,11 @@ LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 const int ldrPin = A3; // LDR en el pin analogico 0
 int ldrValue = 0;
 
-  byte sensorpir = 7;
+  byte sensorpir = 6;
 byte led = 13;
-  
+byte pulsador = 7;
+
+  int cont=0;
 //**************FIN DECLARACIONES***********
 
 
@@ -77,8 +79,8 @@ void setup() {
 
 void loop() {
   //sensorLuz(); 
-sensorLuz(700);
-sensorMov();
+//sensorLuz(700);
+//sensorMov();
 //dispLCD("Sistema De Control", "Ingressos GYM");
   // send data only when you receive data:
   if (Serial.available() > 0) {
@@ -88,7 +90,7 @@ sensorMov();
   variable=text.substring(2,text.length());
   Serial.println(codigo);
   Serial.println(variable);
-  dispLCD("Sistema De Control", "Ingressos GYM");
+  dispLCD(codigo, variable);
   switch (codigo.toInt()) {
   case 1:
     // statements
@@ -107,7 +109,15 @@ sensorMov();
         if (getFingerprintIDez()>0){
           dispLCD("Acceso Correcto", "Bienvenido");
           activarSwitch();//funcion que activa el relay o switch 110v
-          sonido(2);
+          pinMode(7,INPUT);
+          for (int i=0; i<15;i++){
+            sensorMov();
+            delay(1000);
+            if(digitalRead(pulsador) == HIGH){
+              i=15;
+            }
+          }
+          //sonido(2);
           break;
         }
         //break;
@@ -208,7 +218,6 @@ uint8_t getFingerprintEnroll() {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);
-  dispLCD("Registrando", "Colocar Dedo");
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -255,7 +264,6 @@ uint8_t getFingerprintEnroll() {
   }
   
   Serial.println("  - Remove finger");
-  dispLCD("Registrando", "Remueva Dedo");
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
@@ -264,7 +272,6 @@ uint8_t getFingerprintEnroll() {
   Serial.print("ID "); Serial.println(id);
   p = -1;
   Serial.println("Place same finger again");
-  dispLCD("Registrando", "Colocar De Nuevo");
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -331,7 +338,6 @@ uint8_t getFingerprintEnroll() {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println(" Stored!");
-    dispLCD("Registrando", "OK!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;
@@ -569,6 +575,7 @@ void sensorMov(){
   if(digitalRead(sensorpir) == HIGH)
   {
     //dispLCD("Detectado Ingreso","Sensor Movimiento");
+    Serial.println("Detectado Ingreso Sensor Movimiento");
     sonido(1);
   delay(250);
   sonido(1);
