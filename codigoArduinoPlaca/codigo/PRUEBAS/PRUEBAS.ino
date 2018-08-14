@@ -576,6 +576,7 @@ void sensorMov(){
   {
     //dispLCD("Detectado Ingreso","Sensor Movimiento");
     Serial.println("Detectado Ingreso Sensor Movimiento");
+    Serial.println("Detectado Ingreso Sensor Movimiento");
     sonido(1);
   delay(250);
   sonido(1);

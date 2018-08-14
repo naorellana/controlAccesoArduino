@@ -16,13 +16,21 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${datos}" var="dato">
-                            <tr>
-                                <td><c:out value="${dato.id}" /></td>
-                                <td><c:out value="${dato.nombre}" /></td>
-                                <td><c:out value="${dato.fecha  }" /></td>
+                            <c:if test = "${dato.observacion =='si'}">
+                                <c:set var="getReactive" value="${'bg-danger'}"  />
+                                <c:set var="add" value="${'Entrada Sospechosa: '}"  />
+                             </c:if>
+                            <c:if test = "${dato.observacion !='si'}">
+                                <c:set var="getReactive" value="${'bg-success'}"  />
+                                <c:set var="add" value="${''}"  />
+                             </c:if>
+                            <tr class=" <c:out value="${getReactive}"/> text-white">
+                                <td ><c:out value="${dato.id}" /></td>
+                                <td  ><c:out value="${dato.nombre}" /></td>
+                                <td ><c:out value="${dato.fecha  }" /></td>
                                 <td><c:out value="${dato.hora  }" /></td>
                                 <td><c:out value="${dato.hora  }" /></td>
-                                <td><c:out value="${dato.observacion}" /></td>
+                                <td><c:out value="${add}"/><c:out value="${dato.observacion}" /></td>
                             </tr>
                         </c:forEach>
                     </tbody>
