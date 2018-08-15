@@ -36,10 +36,11 @@ String b="Nery ORellana:)";
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 //*******************
   //int ledPin = 9; // Piezo on Pin 8
-const int ldrPin = A3; // LDR en el pin analogico 0
+const int ldrPin = A3; // LDR en el pin analogico 3
 int ldrValue = 0;
 
   byte sensorpir = 6;
+  const int infrarojo = A2;
 byte led = 13;
 byte pulsador = 7;
 
@@ -73,7 +74,9 @@ void setup() {
   Serial.println(text1);
   Serial.println(text2); 
   dispLCD("Sistema De Control", "Ingressos GYM");
-  pinMode(7,INPUT);
+  pinMode(pulsador,INPUT);
+  pinMode(infrarojo,INPUT);
+  pinMode(sensorpir,INPUT);
  
 }
 
@@ -90,8 +93,7 @@ void loop() {
   variable=text.substring(2,text.length());
   Serial.println(codigo);
   Serial.println(variable);
-  dispLCD("Sistema De Control", "Ingressos GYM");
-  //dispLCD(codigo, variable);
+  dispLCD(codigo, variable);
   switch (codigo.toInt()) {
   case 1:
     // statements
@@ -113,6 +115,7 @@ void loop() {
           pinMode(7,INPUT);
           for (int i=0; i<15;i++){
             sensorMov();
+            sensorInfra();
             delay(1000);
             if(digitalRead(pulsador) == HIGH){
               i=15;
@@ -578,6 +581,23 @@ void sensorMov(){
     //dispLCD("Detectado Ingreso","Sensor Movimiento");
     Serial.println("Detectado Ingreso Sensor Movimiento");
     Serial.println("Detectado Ingreso Sensor Movimiento");
+    sonido(1);
+  delay(250);
+  sonido(1);
+  delay(250);
+  sonido(1);
+  }
+  
+}
+//***********************
+//********** SENSOR MOVIMIENVO*************
+void sensorInfra(){
+  
+  if(digitalRead(infrarojo) == HIGH)
+  {
+    //dispLCD("Detectado Ingreso","Sensor Movimiento");
+    Serial.println("Detectado Ingreso Sensor Infrarojo");
+    Serial.println("Detectado Ingreso Sensor infrarojo");
     sonido(1);
   delay(250);
   sonido(1);
