@@ -110,12 +110,13 @@ void loop() {
         if (getFingerprintIDez()>0){
           dispLCD("Acceso Correcto", "Bienvenido");
           activarSwitch();//funcion que activa el relay o switch 110v
+          delay(3000);
           pinMode(7,INPUT);
-          for (int i=0; i<15;i++){
+          for (int i=0; i<5;i++){
             sensorMov();
             delay(1000);
             if(digitalRead(pulsador) == HIGH){
-              i=15;
+              i=5;
             }
           }
           //sonido(2);

@@ -28,16 +28,16 @@
                                     <a href="<c:url value="edit?id=${dato.id}" />">
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><button  type="button" class="btn btn-warning">Editar</button></a>
                                     <a href="<c:url value="delete?id=${dato.id}" />">
-                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-danger">Eliminar</button></a>
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-danger" onclick="myFunctionEli()">Eliminar</button></a>
                                     
                                     <a href="<c:url value="usuariodata?id=${dato.id}" />">
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><button  type="button" class="btn btn-primary">Reporte</button></a>
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><button  type="button" class="btn btn-primary" onclick="myFunctionRepo()">Reporte</button></a>
                                     <a href="<c:url value="beta?codigo=2,${dato.id}" />">
-                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-dark">Guardar Huella</button></a>
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-dark" onclick="myFunctionHuella()">Guardar Huella</button></a>
                                     <a href="<c:url value="facturaData?id=${dato.id}" />">
-                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-info">Factura</button></a>
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-info" onclick="myFunctionFac()">Factura</button></a>
                                     <a href="<c:url value="beta?codigo=3,${dato.id}" />">
-                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-success">Entrar</button></a>
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><button  type="button" class="btn btn-success" onclick="myFunctionEntrar()">Entrar</button></a>
                                     
                                 </td>
                             </tr>
@@ -49,4 +49,26 @@
         </div>
     </body>
 </html>
+<script>
+function myFunction() {
+    alert("Hello\nHow are you?");
+}
+
+function myFunctionEli() {
+    alert("Procesando Solicitud De Borrado");
+}
+
+function myFunctionEntrar() {
+    alert("Cuando El Lector de Huellas Digitales Encienda La Luz De Forma Intermitente \n Coloque Su Dedo Con La Huella Registrada");
+}
+function myFunctionHuella() {
+    alert("INSTRUCCIONES: \n1- El Usuario Debe Colocar La Huella Cuando El Sensor Encienda La Luz\n Una Vez Colocada,\n 2- Retirar El Dedo Del Sensor \n 3-Colocar La huella Nuevamente Para Confirmar");
+}
+function myFunctionFact() {
+    alert("Se Generará El Forulario Para La Factura Correspondiente");
+}
+function myFunctionRepo() {
+    alert("Se Generará El Reporte Solicitado");
+}
+</script>
 <jsp:include page="footer.jsp" />

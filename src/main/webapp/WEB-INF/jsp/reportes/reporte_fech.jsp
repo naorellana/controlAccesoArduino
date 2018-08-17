@@ -17,14 +17,14 @@
                     <tbody>
                         <c:forEach items="${datos}" var="dato">
                             <c:if test = "${dato.observacion =='si'}">
-                                <c:set var="getReactive" value="${'bg-danger'}"  />
+                                <c:set var="getReactive" value="${'text-danger'}"  />
                                 <c:set var="add" value="${'Entrada Sospechosa: '}"  />
                              </c:if>
                             <c:if test = "${dato.observacion !='si'}">
-                                <c:set var="getReactive" value="${'bg-success'}"  />
-                                <c:set var="add" value="${''}"  />
+                                <c:set var="getReactive" value="${'text-success'}"  />
+                                <c:set var="add" value="${'Ingreso Desde APP: '}"  />
                              </c:if>
-                            <tr class=" <c:out value="${getReactive}"/> text-white">
+                            <tr class=" <c:out value="${getReactive}"/> ">
                                 <td ><c:out value="${dato.id}" /></td>
                                 <td  ><c:out value="${dato.nombre}" /></td>
                                 <td ><c:out value="${dato.fecha  }" /></td>

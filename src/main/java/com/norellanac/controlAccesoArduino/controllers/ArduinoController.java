@@ -54,17 +54,17 @@ public class ArduinoController {
                 System.out.println(codigo.substring(0,1));
                 System.out.println(Integer.parseInt(codigo.substring(2, codigo.length())));
                 if (Integer.parseInt(codigo.substring(0,1))  ==3){
-                    jdbcTemplate=new JdbcTemplate(con.conectar());
+                   /* jdbcTemplate=new JdbcTemplate(con.conectar());
                         jdbcTemplate.update
                             (
                             "insert into ingresos_per (usuario_id,fecha,hora,marca,observacion ) values (?,?,?,?,?)",
-                             Integer.parseInt(codigo.substring(2, codigo.length())),fecha.date(),fecha.time(),1,"ingresando desde java");
+                             Integer.parseInt(codigo.substring(2, codigo.length())),fecha.date(),fecha.time(),1,"ingresando desde java");*/
                 }
                 arduinoRecibe2EnviaString ard=new arduinoRecibe2EnviaString();
                 
                  try
         {
-            Thread.sleep(500);
+            Thread.sleep(5);
         }catch(InterruptedException e){}
                 ard.enviarDato(codigo);
                 resp.sendRedirect("/home");

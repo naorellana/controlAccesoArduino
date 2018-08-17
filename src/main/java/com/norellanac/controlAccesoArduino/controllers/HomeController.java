@@ -92,6 +92,12 @@ public class HomeController {
                 System.out.println("El codigo enviado es: " +codigo);
                 ard.enviarDato(codigo);
         //fin arduino
+        this.jdbcTemplate.update(
+                    "delete from ingresos_per "
+                + "where "
+                + "usuario_id=? ",
+        id);
+        //DELETE FROM `ingresos_per` WHERE usuario_id=
         resp.sendRedirect("/home");
     }
         

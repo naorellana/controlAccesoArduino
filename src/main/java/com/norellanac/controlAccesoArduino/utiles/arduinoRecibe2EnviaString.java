@@ -96,8 +96,10 @@ public class arduinoRecibe2EnviaString {
                     if (multi.getMessage(0).equals("FoundID" )){
                         codUsuario=multi.getMessage(1);
                     }
-                    if (multi.getMessage(0).equals("Detectado Ingreso Sensor Movimiento" )&&multi.getMessage(1).equals("Detectado Ingreso Sensor Movimiento" )){
+                    if (multi.getMessage(0).equals("Detectado Ingreso Sensor Movimiento" )&& multi.getMessage(1).equals("Detectado Ingreso Sensor Movimiento" )){
                         warning="si";
+                    }else{
+                        warning="JAVA";
                     }
                     concatTextArduino=concatTextArduino+multi.getMessage(0)+multi.getMessage(1);
                     System.out.println("-----------------------------------");
