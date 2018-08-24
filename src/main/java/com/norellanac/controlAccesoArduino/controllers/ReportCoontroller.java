@@ -71,6 +71,18 @@ public class ReportCoontroller {
                         + "WHERE ingresos_per.usuario_id =usuarios.id  and usuarios.id="+id+" order by id desc";
                 List datos=this.jdbcTemplate.queryForList(sql);
 		req.setAttribute("datos",datos);
+                req.setAttribute("rol","../header_adm.jsp");
+		//req.setAttribute("mode", "BOOK_VIEW");
+		return "/reportes/reporte_fech";
+	}
+        
+        @GetMapping("/clienteData")
+	public String clienteData(@RequestParam int id, HttpServletRequest req) {
+                String sql="SELECT ingresos_per.id,usuarios.nombre,  ingresos_per.fecha, ingresos_per.hora, ingresos_per.observacion FROM usuarios, ingresos_per "
+                        + "WHERE ingresos_per.usuario_id =usuarios.id  and usuarios.id="+id+" order by id desc";
+                List datos=this.jdbcTemplate.queryForList(sql);
+		req.setAttribute("datos",datos);
+                req.setAttribute("rol","../header_usr.jsp");
 		//req.setAttribute("mode", "BOOK_VIEW");
 		return "/reportes/reporte_fech";
 	}

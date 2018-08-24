@@ -7,7 +7,13 @@
   <p class="lead">Sistema De  Control Del Ingreso De Usuarios</p>
   <hr class="my-4">
   <p>Sistema Para Control De Acceso, utilizando metodos de seguridad biometricos</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">Leer Más</a>
+  <form action="cliente">
+  <div class="form-group" >
+    <label for="id">Código De Usuario</label>
+    <input type="number" class="form-control" id="id" name="id" placeholder="Código De Usuario">
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg">Ingresar</button>
+</form>
 </div>
 
 <div class="card text-center">

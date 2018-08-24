@@ -3,15 +3,19 @@ package com.norellanac.controlAccesoArduino.controllers;
 
 
 import com.norellanac.controlAccesoArduino.models.Conectar;
+import com.norellanac.controlAccesoArduino.models.CustomerRowMapper;
 import com.norellanac.controlAccesoArduino.models.Usuarios;
 import com.norellanac.controlAccesoArduino.utiles.arduinoRecibe2EnviaString;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +51,48 @@ public class HomeController {
         mav.setViewName("home");
         return mav;
     }
+    
+    
+    
+    @GetMapping("/cliente")
+	public void cliente(@RequestParam int id, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+                String sql="SELECT usuarios.id,usuarios.nombre,  usuarios.correo, usuarios.telefono, usuarios.rol, usuarios.estado FROM usuarios "
+                        + "WHERE usuarios.id="+id;
+                List datos=this.jdbcTemplate.queryForList(sql);
+                req.setAttribute("datos",datos);
+                //Usuarios u= (Usuarios) this.jdbcTemplate.queryForRowSet(sql);
+                //System.out.println(datos.toArray()[0]);
+                String ret="";
+                List<Map<String, Object>> featureServices = datos;
+ 
+                for (Map<String, Object> featureService : featureServices) {
+    for (Map.Entry<String, Object> entry : featureService.entrySet()) {
+        
+        if(entry.getKey().equals("rol") && entry.getValue().toString().equals("1")){
+            resp.sendRedirect("/client?id="+id);
+        } 
+        if(entry.getKey().equals("rol") && entry.getValue().toString().equals("0")){
+            resp.sendRedirect("/home");
+        } 
+       System.out.println(entry.getKey() + ": " + entry.getValue());
+    }
+}     
+		//req.setAttribute("mode", "BOOK_VIEW");
+	}
+        
+   
+         @GetMapping("/client")
+	public String client(@RequestParam int id, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+                String sql="SELECT usuarios.id,usuarios.nombre,  usuarios.correo, usuarios.telefono, usuarios.rol, usuarios.estado FROM usuarios "
+                        + "WHERE usuarios.id="+id;
+                List datos=this.jdbcTemplate.queryForList(sql);
+                req.setAttribute("datos",datos);
+                return "/cliente";
+		//req.setAttribute("mode", "BOOK_VIEW");
+	}
+        
+        
+    
     @GetMapping("/new")
 	public String neww(HttpServletRequest req) {
                 //String sql="select * from usuarios order by id desc";
@@ -60,8 +106,8 @@ public class HomeController {
 	public void guardar( @ModelAttribute Usuarios usuarios, BindingResult bindingResult, HttpServletResponse resp) throws IOException{
 		jdbcTemplate.update
         (
-        "insert into usuarios (id,nombre,correo,telefono ) values (?,?,?,?)",
-         usuarios.getId(), usuarios.getNombre(),usuarios.getCorreo(),usuarios.getTelefono()
+        "insert into usuarios (id,nombre,correo,telefono, estado, rol ) values (?,?,?,?,?,?)",
+         usuarios.getId(), usuarios.getNombre(),usuarios.getCorreo(),usuarios.getTelefono(), usuarios.getEstado(), usuarios.getRol()
         ); 
 		//req.setAttribute("books", springService.findAllBooks());
 		//req.setAttribute("mode", "BOOK_VIEW");
@@ -107,10 +153,12 @@ public class HomeController {
                     "update usuarios "
                 + "set nombre=?,"
                 + " correo=?,"
-                + "telefono=? "
+                + "telefono=?, "
+                + "rol=?, "
+                + "estado=? "
                 + "where "
                 + "id=? ",
-         u.getNombre(),u.getCorreo(),u.getTelefono(),u.getId());
+         u.getNombre(),u.getCorreo(),u.getTelefono(),u.getRol(), u.getEstado(), u.getId());
 		resp.sendRedirect("/home");
 	} 
     

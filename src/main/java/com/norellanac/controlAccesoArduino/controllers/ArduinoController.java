@@ -67,7 +67,7 @@ public class ArduinoController {
             Thread.sleep(5);
         }catch(InterruptedException e){}
                 ard.enviarDato(codigo);
-                resp.sendRedirect("/home");
+                resp.sendRedirect("/");
                 
         }
 
