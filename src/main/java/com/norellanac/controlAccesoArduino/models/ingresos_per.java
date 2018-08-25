@@ -5,8 +5,6 @@
  */
 package com.norellanac.controlAccesoArduino.models;
 
-import java.util.Date;
-
 /**
  *
  * @author ORELLANA CUY
@@ -27,10 +25,21 @@ CREATE TABLE `ingresos_per` (
 INSERT INTO `ingresos_per`(`id`, `usuario_id`, `fecha`, `hora`, `marca`, `observacion`) VALUES (1,2,'2018-07-12','188:30',1,'test mysql')
 */
 
+/*
+INSERT INTO `ingresos_per`(`id`, `usuario_id`, `fecha`, `hora`, `marca`, `observacion`) VALUES (1,2,'2018-07-12','188:30',1,'test mysql')
+*/
+
 
 public class ingresos_per {
     private int id, usuario_id,marca;
     private String fecha, hora, observacion;
+
+    public ingresos_per(int usuario_id, String fecha, String hora, String observacion) {
+        this.usuario_id = usuario_id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.observacion = observacion;
+    }
 
     public int getId() {
         return id;

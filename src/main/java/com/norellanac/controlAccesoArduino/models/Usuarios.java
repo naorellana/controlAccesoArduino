@@ -6,10 +6,26 @@ import java.lang.reflect.Array;
 
 public class Usuarios {
     private int id, estado,rol;
-    private String nombre,correo,telefono;
+    private String nombre,correo,telefono, fecha, hora, observaciones;
 
     public Usuarios() {
     }
+
+    public Usuarios(int id, String nombre, String correo, String telefono) {
+        this.id = id;
+        this.nombre = nombre;
+        this.correo = correo;
+        this.telefono = telefono;
+    }
+
+    public Usuarios(String nombre, String fecha, String hora, String observaciones) {
+        this.nombre = nombre;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.observaciones = observaciones;
+    }
+    
+    
 
 
     

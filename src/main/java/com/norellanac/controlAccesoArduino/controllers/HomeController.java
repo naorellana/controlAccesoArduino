@@ -3,7 +3,6 @@ package com.norellanac.controlAccesoArduino.controllers;
 
 
 import com.norellanac.controlAccesoArduino.models.Conectar;
-import com.norellanac.controlAccesoArduino.models.CustomerRowMapper;
 import com.norellanac.controlAccesoArduino.models.Usuarios;
 import com.norellanac.controlAccesoArduino.utiles.arduinoRecibe2EnviaString;
 import java.io.IOException;

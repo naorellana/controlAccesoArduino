@@ -1,9 +1,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="${rol}" />
+<jsp:include page="../header.jsp" />
         <div class="container">
                 <h1>Reporte De Ingresos</h1>
-                <table class="table table-bordered table-striped table-hover table-responsive">
+                <table id="testTable" class="table table-bordered table-striped table-hover table-responsive">
                     <thead>
                         <tr>
                             <th>Registro</th>
@@ -36,4 +36,5 @@
                     </tbody>
                 </table>
         </div>
+<input type="button" onclick="tableToExcel('testTable', 'W3C Example Table')" value="Export to Excel">
 <jsp:include page="../footer.jsp" />

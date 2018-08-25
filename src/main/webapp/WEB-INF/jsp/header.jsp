@@ -8,6 +8,7 @@
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/bootstrap.js"></script>
+<script src="tableToExcel.js"></script>
 <title>Control De Usurios Gimnacio </title>
 </head>
 <body>

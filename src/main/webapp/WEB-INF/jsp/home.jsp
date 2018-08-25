@@ -6,6 +6,7 @@
                 <h1>Administración de Usuarios</h1>
                 <p>
                     <a href="<c:url value="new" />" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar</a>
+                    <a href="<c:url value="/report/?type=xls" />" class="btn btn-dark"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Exportar Excel</a>
                 </p>
                 <table class="table table-bordered table-striped table-hover table-responsive">
                     <thead>
